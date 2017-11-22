@@ -169,7 +169,7 @@ const Skeleton::Joint &Skeleton::operator()(const char *name) const {
     return _currentJoints[0];
 }
 
-void Skeleton::refreshSkeleton() const {
+void Skeleton::refresh() const {
     _remote->mainloop();
 }
 

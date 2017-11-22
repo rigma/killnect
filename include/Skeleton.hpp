@@ -53,7 +53,7 @@ public:
     const Joint &wristRight() const;
 
 public:
-    void refreshSkeleton() const;
+    void refresh() const;
 
 private:
     void initSkeleton();

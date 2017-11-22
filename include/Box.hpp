@@ -6,6 +6,7 @@
 
 class Box {
 public:
+    Box();
     Box(
         const std::vector<double> &center,
         const double &width = std::numeric_limits<double>::infinity(),
@@ -15,13 +16,16 @@ public:
     ~Box();
 
 public:
+    void operator=(const Box &parent);
+
+public:
     const double &width() const;
     const double &height() const;
     const double &depth() const;
 
 public:
     Box *width(const double &value);
-    Box *heght(const double &value);
+    Box *height(const double &value);
     Box *depth(const double &value);
 
 public:
@@ -36,6 +40,13 @@ private:
 };
 
 inline Box::~Box() {}
+
+inline void Box::operator=(const Box &parent) {
+    _center = parent._center;
+    _width = parent._width;
+    _height = parent._height;
+    _depth = parent._depth;
+}
 
 inline const double &Box::width() const {
     return _width;
@@ -56,7 +67,7 @@ inline Box *Box::width(const double &value) {
     return this;
 }
 
-inline Box *Box::heght(const double &value) {
+inline Box *Box::height(const double &value) {
     if (value >= 0.)
         _height = value;
 

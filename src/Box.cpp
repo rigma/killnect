@@ -3,6 +3,15 @@
 
 #include <Box.hpp>
 
+Box::Box() : _center(std::vector<double>(3)) {
+    _center[0] = 0.;
+    _center[1] = 0.;
+    _center[2] = 0.;
+    _width = std::numeric_limits<double>::infinity();
+    _height = std::numeric_limits<double>::infinity();
+    _depth = std::numeric_limits<double>::infinity();
+}
+
 Box::Box(const std::vector<double> &center, const double &width, const double &height, const double &depth) : _width(width), _height(height), _depth(depth) {
     assert(center.size() == 3);
 
