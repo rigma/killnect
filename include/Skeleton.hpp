@@ -7,41 +7,50 @@
 
 class Skeleton {
 public:
-    Skeleton(const std::string &name, std::string &address, int port, bool shutup = false);
+    struct Joint {
+        vrpn_float64 pos[3];
+        vrpn_float64 distance;
+        vrpn_float64 speed;
+        vrpn_float64 acceleration;
+        timeval timestamp;
+    };
+
+public:
+    Skeleton(const std::string &name, const std::string &address, int port, bool shutup = false);
     Skeleton(const char *name, const char *address, int port, bool shutup = false);
     ~Skeleton();
 
 public:
-    const std::vector<vrpn_float64> &operator()(const char *jointName) const;
-    const std::vector<vrpn_float64> &operator()(const std::string &jointName) const;
+    const Joint &operator()(const char *jointName) const;
+    const Joint &operator()(const std::string &jointName) const;
 
 public:
-    const std::vector<std::vector<vrpn_float64>> &joints() const;
-    const std::vector<vrpn_float64> &ankleLeft() const;
-    const std::vector<vrpn_float64> &ankleRight() const;
-    const std::vector<vrpn_float64> &elbowLeft() const;
-    const std::vector<vrpn_float64> &elbowRight() const;
-    const std::vector<vrpn_float64> &footLeft() const;
-    const std::vector<vrpn_float64> &footRight() const;
-    const std::vector<vrpn_float64> &handLeft() const;
-    const std::vector<vrpn_float64> &handRight() const;
-    const std::vector<vrpn_float64> &handTipLeft() const;
-    const std::vector<vrpn_float64> &handTipRight() const;
-    const std::vector<vrpn_float64> &head() const;
-    const std::vector<vrpn_float64> &hipLeft() const;
-    const std::vector<vrpn_float64> &hipRight() const;
-    const std::vector<vrpn_float64> &kneeLeft() const;
-    const std::vector<vrpn_float64> &kneeRight() const;
-    const std::vector<vrpn_float64> &neck() const;
-    const std::vector<vrpn_float64> &shoulderLeft() const;
-    const std::vector<vrpn_float64> &shoulderRight() const;
-    const std::vector<vrpn_float64> &spineBase() const;
-    const std::vector<vrpn_float64> &spineMiddle() const;
-    const std::vector<vrpn_float64> &spineShoulder() const;
-    const std::vector<vrpn_float64> &thumbLeft() const;
-    const std::vector<vrpn_float64> &thumbRight() const;
-    const std::vector<vrpn_float64> &wristLeft() const;
-    const std::vector<vrpn_float64> &wristRight() const;
+    const std::vector<Joint> &joints() const;
+    const Joint &ankleLeft() const;
+    const Joint &ankleRight() const;
+    const Joint &elbowLeft() const;
+    const Joint &elbowRight() const;
+    const Joint &footLeft() const;
+    const Joint &footRight() const;
+    const Joint &handLeft() const;
+    const Joint &handRight() const;
+    const Joint &handTipLeft() const;
+    const Joint &handTipRight() const;
+    const Joint &head() const;
+    const Joint &hipLeft() const;
+    const Joint &hipRight() const;
+    const Joint &kneeLeft() const;
+    const Joint &kneeRight() const;
+    const Joint &neck() const;
+    const Joint &shoulderLeft() const;
+    const Joint &shoulderRight() const;
+    const Joint &spineBase() const;
+    const Joint &spineMiddle() const;
+    const Joint &spineShoulder() const;
+    const Joint &thumbLeft() const;
+    const Joint &thumbRight() const;
+    const Joint &wristLeft() const;
+    const Joint &wristRight() const;
 
 public:
     void refreshSkeleton() const;
@@ -51,112 +60,113 @@ private:
     void initSkeleton();
 
 private:
-    std::vector<std::vector<vrpn_float64>> _joints;
+    std::vector<Joint> _currentJoints;
+    std::vector<Joint> _previousJoints;
     vrpn_Tracker_Remote *_remote;
 };
 
-inline const std::vector<std::vector<vrpn_float64>> &Skeleton::joints() const {
-    return _joints;
+inline const std::vector<Skeleton::Joint> &Skeleton::joints() const {
+    return _currentJoints;
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::ankleLeft() const {
-    return _joints[14];
+inline const Skeleton::Joint &Skeleton::ankleLeft() const {
+    return _currentJoints[14];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::ankleRight() const {
-    return _joints[18];
+inline const Skeleton::Joint &Skeleton::ankleRight() const {
+    return _currentJoints[18];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::elbowLeft() const {
-    return _joints[5];
+inline const Skeleton::Joint &Skeleton::elbowLeft() const {
+    return _currentJoints[5];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::elbowRight() const {
-    return _joints[9];
+inline const Skeleton::Joint &Skeleton::elbowRight() const {
+    return _currentJoints[9];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::footLeft() const {
-    return _joints[15];
+inline const Skeleton::Joint &Skeleton::footLeft() const {
+    return _currentJoints[15];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::footRight() const {
-    return _joints[19];
+inline const Skeleton::Joint &Skeleton::footRight() const {
+    return _currentJoints[19];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::handLeft() const {
-    return _joints[7];
+inline const Skeleton::Joint &Skeleton::handLeft() const {
+    return _currentJoints[7];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::handRight() const {
-    return _joints[11];
+inline const Skeleton::Joint &Skeleton::handRight() const {
+    return _currentJoints[11];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::handTipLeft() const {
-    return _joints[21];
+inline const Skeleton::Joint &Skeleton::handTipLeft() const {
+    return _currentJoints[21];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::handTipRight() const {
-    return _joints[23];
+inline const Skeleton::Joint &Skeleton::handTipRight() const {
+    return _currentJoints[23];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::head() const {
-    return _joints[3];
+inline const Skeleton::Joint &Skeleton::head() const {
+    return _currentJoints[3];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::hipLeft() const {
-    return _joints[12];
+inline const Skeleton::Joint &Skeleton::hipLeft() const {
+    return _currentJoints[12];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::hipRight() const {
-    return _joints[16];
+inline const Skeleton::Joint &Skeleton::hipRight() const {
+    return _currentJoints[16];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::kneeLeft() const {
-    return _joints[13];
+inline const Skeleton::Joint &Skeleton::kneeLeft() const {
+    return _currentJoints[13];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::kneeRight() const {
-    return _joints[17];
+inline const Skeleton::Joint &Skeleton::kneeRight() const {
+    return _currentJoints[17];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::neck() const {
-    return _joints[2];
+inline const Skeleton::Joint &Skeleton::neck() const {
+    return _currentJoints[2];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::shoulderLeft() const {
-    return _joints[4];
+inline const Skeleton::Joint &Skeleton::shoulderLeft() const {
+    return _currentJoints[4];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::shoulderRight() const {
-    return _joints[8];
+inline const Skeleton::Joint &Skeleton::shoulderRight() const {
+    return _currentJoints[8];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::spineBase() const {
-    return _joints[0];
+inline const Skeleton::Joint &Skeleton::spineBase() const {
+    return _currentJoints[0];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::spineMiddle() const {
-    return _joints[1];
+inline const Skeleton::Joint &Skeleton::spineMiddle() const {
+    return _currentJoints[1];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::spineShoulder() const {
-    return _joints[20];
+inline const Skeleton::Joint &Skeleton::spineShoulder() const {
+    return _currentJoints[20];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::thumbLeft() const {
-    return _joints[22];
+inline const Skeleton::Joint &Skeleton::thumbLeft() const {
+    return _currentJoints[22];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::thumbRight() const {
-    return _joints[24];
+inline const Skeleton::Joint &Skeleton::thumbRight() const {
+    return _currentJoints[24];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::wristLeft() const {
-    return _joints[6];
+inline const Skeleton::Joint &Skeleton::wristLeft() const {
+    return _currentJoints[6];
 }
 
-inline const std::vector<vrpn_float64> &Skeleton::wristRight() const {
-    return _joints[10];
+inline const Skeleton::Joint &Skeleton::wristRight() const {
+    return _currentJoints[10];
 }
 
 #endif
