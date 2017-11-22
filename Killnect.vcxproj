@@ -147,10 +147,8 @@
   <ItemGroup>
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MovementRecognition.cpp" />
     <ClCompile Include="src\Skeleton.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\MovementRecognition.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

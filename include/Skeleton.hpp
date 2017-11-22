@@ -16,8 +16,8 @@ public:
     };
 
 public:
-    Skeleton(const std::string &name, const std::string &address, int port, bool shutup = false);
-    Skeleton(const char *name, const char *address, int port, bool shutup = false);
+    Skeleton(const std::string &name, const std::string &address, int port = 3883, bool shutup = false);
+    Skeleton(const char *name, const char *address, int port = 3883, bool shutup = false);
     ~Skeleton();
 
 public:
