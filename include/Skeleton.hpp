@@ -56,13 +56,14 @@ public:
     void refreshSkeleton() const;
 
 private:
-    void VRPN_CALLBACK handleTrackerInput(void *data, const vrpn_TRACKERCB tracker);
     void initSkeleton();
 
 private:
     std::vector<Joint> _currentJoints;
     std::vector<Joint> _previousJoints;
     vrpn_Tracker_Remote *_remote;
+
+    friend void VRPN_CALLBACK handleTrackerInput(void*, const vrpn_TRACKERCB);
 };
 
 inline const std::vector<Skeleton::Joint> &Skeleton::joints() const {
