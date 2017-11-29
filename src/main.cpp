@@ -5,12 +5,16 @@
 #include <string>
 #include <vector>
 
-static void handUp(const std::string &name, const std::vector<std::string> &joints) {
+static void handUp(const std::string &name) {
     std::cout << name << " up!" << std::endl;
 }
 
-static void handDown(const std::string &name, const std::vector<std::string> &joints) {
+static void handDown(const std::string &name) {
     std::cout << name << " down!" << std::endl;
+}
+
+static void clap(const std::string &name) {
+    std::cout << "Clap!" << std::endl;
 }
 
 int main(int argc, char **argv) {
@@ -30,8 +34,15 @@ int main(int argc, char **argv) {
     Box upBox(upAnchor, 1, .2);
     Box downBox(downAnchor, 1, .2);
 
-    recognition->addDetectionBox("LeftHand", "HandLeft", upBox, handUp);
-    recognition->addDetectionBox("RightHand", "HandRight", upBox, handUp);
+    std::vector<std::string> joints(2);
+    Action clapAction(0.05);
+
+    joints[0] = "HandLeft";
+    joints[1] = "HandRight";
+
+    recognition->addDetectionBox("LeftHand", "HandLeft", upBox, &handUp);
+    recognition->addDetectionBox("RightHand", "HandRight", upBox, &handUp);
+    recognition->addAction("Clap", joints, clapAction, &clap);
 
     for (;;) {
         skeleton->refresh();

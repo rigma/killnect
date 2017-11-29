@@ -140,11 +140,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Action.hpp" />
     <ClInclude Include="include\Box.hpp" />
     <ClInclude Include="include\MovementRecognition.hpp" />
     <ClInclude Include="include\Skeleton.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Action.cpp" />
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MovementRecognition.cpp" />
