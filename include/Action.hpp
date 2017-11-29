@@ -1,3 +1,10 @@
+/**
+* @file Action.hpp
+* @brief Recognizable action
+* @author Romain Failla
+* @version 1.0
+*/
+
 #ifndef ACTION_HPP
 #define ACTION_HPP
 
@@ -5,13 +12,40 @@
 
 #include "Skeleton.hpp"
 
+/**
+ * @class Action
+ * @brief Represents the parameters of an action performed by a user
+ */
 class Action {
 public:
+    /**
+     * @brief Constructor
+     *
+     * Default constructor
+     *
+     * @param distance: the distance between the joints during the action
+     * @param speed: the speed of the joints during the action
+     * @param acceleration: the acceleration of the joints during the action
+     */
     Action(const double &distance = std::numeric_limits<double>::epsilon(), const double &speed = 0., const double &acceleration = 0.);
 
 public:
+    /**
+     * @brief Returns the distance between the joints
+     * @return The distance between the joints during the action
+     */
     const double &distance() const;
+
+    /**
+     * @brief Returns the speed of the joints
+     * @return The speed of the joints during the action
+     */
     const double &speed() const;
+
+    /**
+     * @brief Returns the acceleration of the joints
+     * @return The acceleration of the joints during the action
+     */
     const double &acceleration() const;
 
 public:
