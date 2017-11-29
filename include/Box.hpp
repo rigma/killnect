@@ -23,8 +23,22 @@ public:
      * @brief Constructor
      *
      * Default constructor of the class
+     *
+     * @param x: the abscissa of the center
+     * @param y: the ordinate of the center
+     * @param z: the depth of the center
+     * @param width: the width of the box
+     * @param height: the height of the box
+     * @param depth: the depth of the box
      */
-    Box();
+    Box(
+        const double &x = 0.,
+        const double &y = 0.,
+        const double &z = 0.,
+        const double &width = std::numeric_limits<double>::infinity(),
+        const double &height = std::numeric_limits<double>::infinity(),
+        const double &depth = std::numeric_limits<double>::infinity()
+    );
 
     /**
      * @brief Constructor
