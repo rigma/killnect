@@ -10,19 +10,32 @@ static void VRPN_CALLBACK handleTrackerPositionInput(void *data, vrpn_TRACKERCB 
         skeleton->_currentJoints[tracker.sensor].pos[i] = tracker.pos[i];
     }
 
+    skeleton->_previousJoints[tracker.sensor].timestamp = skeleton->_currentJoints[tracker.sensor].timestamp;
     skeleton->_currentJoints[tracker.sensor].timestamp = tracker.msg_time;
 
+    double previousTimestamp(skeleton->_previousJoints[tracker.sensor].timestamp.tv_sec);
+    double currentTimestamp(tracker.msg_time.tv_sec);
+    
     if (!std::isnan<double>(skeleton->_previousJoints[tracker.sensor].pos[0])) {
+        double dt(currentTimestamp - previousTimestamp);
         vrpn_float64 dst(0.);
+
         for (std::uint8_t i(0); i < 3; ++i) {
             vrpn_float64 tmp(skeleton->_currentJoints[tracker.sensor].pos[i] - skeleton->_previousJoints[tracker.sensor].pos[i]);
+            skeleton->_currentJoints[tracker.sensor].vel[i] = tmp / dt;
+            skeleton->_currentJoints[tracker.sensor].acc[i] = tmp / (dt * dt);
 
             dst += (tmp * tmp);
         }
 
-        skeleton->_currentJoints[tracker.sensor].distance = dst;
+        skeleton->_currentJoints[tracker.sensor].distance = std::sqrt(dst);
     } else {
         skeleton->_currentJoints[tracker.sensor].distance = 0.;
+
+        for (std::uint8_t i(0); i < 3; ++i) {
+            skeleton->_currentJoints[tracker.sensor].vel[i] = std::nan(nullptr);
+            skeleton->_currentJoints[tracker.sensor].acc[i] = std::nan(nullptr);
+        }
     }
 }
 
