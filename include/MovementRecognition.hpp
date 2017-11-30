@@ -8,8 +8,9 @@
 #ifndef MOVEMENT_RECOGNITION_HPP
 #define MOVEMENT_RECOGNITION_HPP
 
-#include <map>
+#include <boost/signals2/signal.hpp>
 #include <vector>
+#include <map>
 
 #include "Action.hpp"
 #include "Box.hpp"
@@ -26,12 +27,12 @@ public:
     /**
      * @brief Definition of the detection box callback
      */
-    typedef void(*DetectionBoxCallback)(const std::string&, const std::vector<std::string>&);
+    typedef boost::function<void(const std::string&, const std::vector<std::string>&)> DetectionBoxCallback;
     
     /**
      * @brief Definition of the action's detection callback
      */
-    typedef void(*ActionCallback)(const std::string&);
+    typedef boost::function<void(const std::string&)> ActionCallback;
 
 public:
     /**
@@ -140,9 +141,9 @@ private:
      * @brief Represents the configuration of a detection box
      */
     struct DetectionBox {
+        boost::signals2::signal<void(const std::string&, const std::vector<std::string>&)> sig;
         std::vector<std::string> joints;
         Box box;
-        DetectionBoxCallback cb;
     };
 
     /**
@@ -150,9 +151,9 @@ private:
      * @brief Represents the configuration of a recognizable action
      */
     struct DetectionAction {
+        boost::signals2::signal<void(const std::string&)> sig;
         std::vector<std::string> joints;
         Action action;
-        ActionCallback cb;
     };
 
 private:
