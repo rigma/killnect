@@ -1,20 +1,19 @@
 #include <cmath>
 #include <Skeleton.hpp>
 
-static void VRPN_CALLBACK handleTrackerInput(void *data, vrpn_TRACKERCB tracker) {
+static void VRPN_CALLBACK handleTrackerPositionInput(void *data, vrpn_TRACKERCB tracker) {
     Skeleton *skeleton(static_cast<Skeleton*>(data));
+    skeleton->_refreshed = true;
 
-    skeleton->_previousJoints[tracker.sensor] = skeleton->_currentJoints[tracker.sensor];
-
-    for (std::uint8_t i(0); i < 3; ++i)
+    for (std::uint8_t i(0); i < 3; ++i) {
+        skeleton->_previousJoints[tracker.sensor].pos[i] = skeleton->_currentJoints[tracker.sensor].pos[i];
         skeleton->_currentJoints[tracker.sensor].pos[i] = tracker.pos[i];
+    }
 
     skeleton->_currentJoints[tracker.sensor].timestamp = tracker.msg_time;
 
     if (!std::isnan<double>(skeleton->_previousJoints[tracker.sensor].pos[0])) {
         vrpn_float64 dst(0.);
-        long dt(skeleton->_currentJoints[tracker.sensor].timestamp.tv_sec - skeleton->_previousJoints[tracker.sensor].timestamp.tv_sec);
-
         for (std::uint8_t i(0); i < 3; ++i) {
             vrpn_float64 tmp(skeleton->_currentJoints[tracker.sensor].pos[i] - skeleton->_previousJoints[tracker.sensor].pos[i]);
 
@@ -22,18 +21,36 @@ static void VRPN_CALLBACK handleTrackerInput(void *data, vrpn_TRACKERCB tracker)
         }
 
         skeleton->_currentJoints[tracker.sensor].distance = dst;
-        skeleton->_currentJoints[tracker.sensor].speed = dst / dt;
-        skeleton->_currentJoints[tracker.sensor].acceleration = dst / (dt * dt);
     } else {
         skeleton->_currentJoints[tracker.sensor].distance = 0.;
-        skeleton->_currentJoints[tracker.sensor].speed = std::nan(nullptr);
-        skeleton->_currentJoints[tracker.sensor].acceleration = std::nan(nullptr);
     }
 }
 
-Skeleton::Skeleton(const std::string &name, const std::string &address, int port, bool shutup) : _currentJoints(25), _previousJoints(25) {
+static void VRPN_CALLBACK handleTrackerVelocityInput(void *data, vrpn_TRACKERVELCB tracker) {
+    Skeleton *skeleton(static_cast<Skeleton*>(data));
+    skeleton->_refreshed = true;
+
+    for (std::uint8_t i(0); i < 3; ++i) {
+        skeleton->_previousJoints[tracker.sensor].vel[i] = skeleton->_currentJoints[tracker.sensor].vel[i];
+        skeleton->_currentJoints[tracker.sensor].vel[i] = tracker.vel[i];
+    }
+}
+
+static void VRPN_CALLBACK handleTrackerAccelerationInput(void *data, vrpn_TRACKERACCCB tracker) {
+    Skeleton *skeleton(static_cast<Skeleton*>(data));
+    skeleton->_refreshed = true;
+
+    for (std::uint8_t i(0); i < 3; ++i) {
+        skeleton->_previousJoints[tracker.sensor].acc[i] = skeleton->_currentJoints[tracker.sensor].acc[i];
+        skeleton->_currentJoints[tracker.sensor].acc[i] = tracker.acc[i];
+    }
+}
+
+Skeleton::Skeleton(const std::string &name, const std::string &address, int port, bool shutup) : _currentJoints(25), _previousJoints(25), _refreshed(false) {
     _remote = new vrpn_Tracker_Remote((name + std::string("@") + address + std::string(":") + std::to_string(port)).c_str());
-    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerInput);
+    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerPositionInput);
+    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerVelocityInput);
+    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerAccelerationInput);
 
     if (_remote != nullptr) {
         _remote->shutup = shutup;
@@ -42,9 +59,11 @@ Skeleton::Skeleton(const std::string &name, const std::string &address, int port
     initSkeleton();
 }
 
-Skeleton::Skeleton(const char *name, const char *address, int port, bool shutup) : _currentJoints(25), _previousJoints(25) {
+Skeleton::Skeleton(const char *name, const char *address, int port, bool shutup) : _currentJoints(25), _previousJoints(25), _refreshed(false) {
     _remote = new vrpn_Tracker_Remote((name + std::string("@") + address + std::string(":") + std::to_string(port)).c_str());
-    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerInput);
+    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerPositionInput);
+    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerVelocityInput);
+    _remote->register_change_handler(static_cast<void*>(this), &handleTrackerAccelerationInput);
 
     if (_remote != nullptr) {
         _remote->shutup = shutup;
@@ -169,20 +188,24 @@ const Skeleton::Joint &Skeleton::operator()(const char *name) const {
     return _currentJoints[0];
 }
 
-void Skeleton::refresh() const {
+void Skeleton::refresh() {
+    _refreshed = false;
     _remote->mainloop();
 }
 
 void Skeleton::initSkeleton() {
     for (std::uint8_t i(0); i < 25; ++i) {
-        Joint j;
-        j.pos[0] = std::nan(nullptr);
-        j.pos[1] = std::nan(nullptr);
-        j.pos[2] = std::nan(nullptr);
-        j.distance = 0.;
-        j.speed = std::nan(nullptr);
-        j.acceleration = std::nan(nullptr);
+        Joint joint;
 
-        _currentJoints[i] = j;
+        for (std::uint8_t j(0); j < 3; ++j) {
+            joint.pos[i] = std::nan(nullptr);
+            joint.vel[i] = std::nan(nullptr);
+            joint.acc[i] = std::nan(nullptr);
+        }
+
+        joint.distance = 0.;
+
+        _currentJoints[i] = joint;
+        _previousJoints[i] = joint;
     }
 }
