@@ -198,9 +198,9 @@ void Skeleton::initSkeleton() {
         Joint joint;
 
         for (std::uint8_t j(0); j < 3; ++j) {
-            joint.pos[i] = std::nan(nullptr);
-            joint.vel[i] = std::nan(nullptr);
-            joint.acc[i] = std::nan(nullptr);
+            joint.pos[j] = std::nan(nullptr);
+            joint.vel[j] = std::nan(nullptr);
+            joint.acc[j] = std::nan(nullptr);
         }
 
         joint.distance = 0.;
