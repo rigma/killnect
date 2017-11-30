@@ -2,7 +2,7 @@
  * @file MovementRecognition.hpp
  * @brief Movement recognition manager
  * @author Romain Failla
- * @version 1.1
+ * @version 1.2
  */
 
 #ifndef MOVEMENT_RECOGNITION_HPP
@@ -27,7 +27,7 @@ public:
     /**
      * @brief Definition of the detection box callback
      */
-    typedef boost::function<void(const std::string&, const std::vector<std::string>&)> DetectionBoxCallback;
+    typedef boost::function<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> DetectionBoxCallback;
     
     /**
      * @brief Definition of the action's detection callback
@@ -141,7 +141,7 @@ private:
      * @brief Represents the configuration of a detection box
      */
     struct DetectionBox {
-        boost::signals2::signal<void(const std::string&, const std::vector<std::string>&)> sig;
+        boost::signals2::signal<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> sig;
         std::vector<std::string> joints;
         Box box;
     };

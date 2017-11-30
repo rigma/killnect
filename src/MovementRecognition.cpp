@@ -23,7 +23,7 @@ void MovementRecognition::launchRecognition(bool refreshSkeleton) const {
         }
 
         if (detectedJoints.size() > 0)
-            pair.second.sig(pair.first, detectedJoints);
+            pair.second.sig(pair.first, detectedJoints, _skeleton);
     }
 
     for (const auto &pair : _actions) {
