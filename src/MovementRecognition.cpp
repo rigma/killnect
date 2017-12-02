@@ -78,6 +78,24 @@ void MovementRecognition::addDetectionBox(const char *name, const char *joint, c
     _detectionBoxes.push_back(detectionBox);
 }
 
+DetectionBox &MovementRecognition::detectionBox(const std::string &name) {
+    for (auto &box : _detectionBoxes) {
+        if (box.name() == name)
+            return box;
+    }
+
+    return *_detectionBoxes.begin();
+}
+
+DetectionBox &MovementRecognition::detectionBox(const char *name) {
+    for (auto &box : _detectionBoxes) {
+        if (box.name() == name)
+            return box;
+    }
+
+    return *_detectionBoxes.begin();
+}
+
 void MovementRecognition::addAction(const std::string &name, const std::vector<std::string> &joints, const Action &action, MovementRecognition::DetectionCallback cb) {
     DetectionAction detectionAction(name, joints, action);
     detectionAction.signal().connect(cb);
@@ -94,4 +112,22 @@ void MovementRecognition::addAction(const char *name, const std::vector<const ch
     detectionAction.signal().connect(cb);
 
     _actions.push_back(detectionAction);
+}
+
+DetectionAction &MovementRecognition::action(const std::string &name) {
+    for (auto &action : _actions) {
+        if (action.name() == name)
+            return action;
+    }
+
+    return *_actions.begin();
+}
+
+DetectionAction &MovementRecognition::action(const char *name) {
+    for (auto &action : _actions) {
+        if (action.name() == name)
+            return action;
+    }
+
+    return *_actions.begin();
 }

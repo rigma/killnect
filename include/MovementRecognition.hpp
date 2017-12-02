@@ -108,6 +108,10 @@ public:
     void addDetectionBox(const char *name, const char *joint, const Box &box, DetectionCallback cb);
 
 public:
+    DetectionBox &detectionBox(const std::string &name);
+    DetectionBox &detectionBox(const char *name);
+
+public:
     /**
      * @brief Add an action to the dictionnary to recognize
      *
@@ -131,6 +135,10 @@ public:
     * @param cb: the cllback callled when the action is recognized
     */
     void addAction(const char *name, const std::vector<const char*> &joints, const Action &action, DetectionCallback cb);
+
+public:
+    DetectionAction &action(const std::string &name);
+    DetectionAction &action(const char *name);
 
 private:
     std::list<DetectionBox> _detectionBoxes;
