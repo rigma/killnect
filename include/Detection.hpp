@@ -13,12 +13,19 @@
 */
 class Detection {
 public:
+    /**
+    * @brief Definition of the detection box callback
+    */
+    typedef boost::function<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> Callback;
+
+public:
     Detection();
     Detection(const std::string &name, const std::vector<std::string> &joints);
     virtual ~Detection();
 
 public:
     virtual void sendSignal(const std::vector<std::string> &joints, const Skeleton *skeleton = nullptr) const = 0;
+    void connect(Callback cb);
 
 public:
     const boost::signals2::signal<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> &signal() const;

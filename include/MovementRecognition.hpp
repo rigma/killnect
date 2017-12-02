@@ -27,12 +27,6 @@
 class MovementRecognition {
 public:
     /**
-     * @brief Definition of the detection box callback
-     */
-    typedef boost::function<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> DetectionCallback;
-
-public:
-    /**
      * @brief Constructor
      *
      * Instantiate a new movement recognition manager
@@ -69,7 +63,7 @@ public:
      * @param box: the configuration of the box in space
      * @param cb: the callback called when the joints will be in the box
      */
-    void addDetectionBox(const std::string &name, const std::vector<std::string> &joints, const Box &box, DetectionCallback cb);
+    void addDetectionBox(const std::string &name, const std::vector<std::string> &joints, const Box &box, Detection::Callback cb);
     
     /**
     * @brief Add a detection box to the manager
@@ -81,7 +75,7 @@ public:
     * @param box: the configuration of the box in space
     * @param cb: the callback called when the joints will be in the box
     */
-    void addDetectionBox(const std::string &name, const std::string &joint, const Box &box, DetectionCallback cb);
+    void addDetectionBox(const std::string &name, const std::string &joint, const Box &box, Detection::Callback cb);
     
     /**
     * @brief Add a detection box to the manager
@@ -93,7 +87,7 @@ public:
     * @param box: the configuration of the box in space
     * @param cb: the callback called when the joints will be in the box
     */
-    void addDetectionBox(const char *name, const std::vector<const char*> &joints, const Box &box, DetectionCallback cb);
+    void addDetectionBox(const char *name, const std::vector<const char*> &joints, const Box &box, Detection::Callback cb);
     
     /**
     * @brief Add a detection box to the manager
@@ -105,7 +99,7 @@ public:
     * @param box: the configuration of the box in space
     * @param cb: the callback called when the joints will be in the box
     */
-    void addDetectionBox(const char *name, const char *joint, const Box &box, DetectionCallback cb);
+    void addDetectionBox(const char *name, const char *joint, const Box &box, Detection::Callback cb);
 
 public:
     DetectionBox &detectionBox(const std::string &name);
@@ -122,7 +116,7 @@ public:
      * @param action: the configuration of the action
      * @param cb: the cllback callled when the action is recognized
      */
-    void addAction(const std::string &name, const std::vector<std::string> &joints, const Action &action, DetectionCallback cb);
+    void addAction(const std::string &name, const std::vector<std::string> &joints, const Action &action, Detection::Callback cb);
     
     /**
     * @brief Add an action to the dictionnary to recognize
@@ -134,7 +128,7 @@ public:
     * @param action: the configuration of the action
     * @param cb: the cllback callled when the action is recognized
     */
-    void addAction(const char *name, const std::vector<const char*> &joints, const Action &action, DetectionCallback cb);
+    void addAction(const char *name, const std::vector<const char*> &joints, const Action &action, Detection::Callback cb);
 
 public:
     DetectionAction &action(const std::string &name);

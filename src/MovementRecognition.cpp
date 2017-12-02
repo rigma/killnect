@@ -40,40 +40,40 @@ void MovementRecognition::launchRecognition(bool refreshSkeleton) {
     }
 }
 
-void MovementRecognition::addDetectionBox(const std::string &name, const std::vector<std::string> &joints, const Box &box, MovementRecognition::DetectionCallback cb) {
+void MovementRecognition::addDetectionBox(const std::string &name, const std::vector<std::string> &joints, const Box &box, Detection::Callback cb) {
     DetectionBox detectionBox(name, joints, box);
-    detectionBox.signal().connect(cb);
+    detectionBox.connect(cb);
 
     _detectionBoxes.push_back(detectionBox);
 }
 
-void MovementRecognition::addDetectionBox(const std::string &name, const std::string &joint, const Box &box, MovementRecognition::DetectionCallback cb) {
+void MovementRecognition::addDetectionBox(const std::string &name, const std::string &joint, const Box &box, Detection::Callback cb) {
     std::vector<std::string> joints(1);
     joints[0] = joint;
 
     DetectionBox detectionBox(name, joints, box);
-    detectionBox.signal().connect(cb);
+    detectionBox.connect(cb);
 
     _detectionBoxes.push_back(detectionBox);
 }
 
-void MovementRecognition::addDetectionBox(const char *name, const std::vector<const char*> &joints, const Box &box, MovementRecognition::DetectionCallback cb) {
+void MovementRecognition::addDetectionBox(const char *name, const std::vector<const char*> &joints, const Box &box, Detection::Callback cb) {
     std::vector<std::string> jts(joints.size());
     for (size_t i(0); i < joints.size(); ++i)
         jts[i] = joints[i];
 
     DetectionBox detectionBox(name, jts, box);
-    detectionBox.signal().connect(cb);
+    detectionBox.connect(cb);
 
     _detectionBoxes.push_back(detectionBox);
 }
 
-void MovementRecognition::addDetectionBox(const char *name, const char *joint, const Box &box, MovementRecognition::DetectionCallback cb) {
+void MovementRecognition::addDetectionBox(const char *name, const char *joint, const Box &box, Detection::Callback cb) {
     std::vector<std::string> joints(1);
     joints[0] = std::string(joint);
 
     DetectionBox detectionBox(name, joints, box);
-    detectionBox.signal().connect(cb);
+    detectionBox.connect(cb);
 
     _detectionBoxes.push_back(detectionBox);
 }
@@ -96,20 +96,20 @@ DetectionBox &MovementRecognition::detectionBox(const char *name) {
     return *_detectionBoxes.begin();
 }
 
-void MovementRecognition::addAction(const std::string &name, const std::vector<std::string> &joints, const Action &action, MovementRecognition::DetectionCallback cb) {
+void MovementRecognition::addAction(const std::string &name, const std::vector<std::string> &joints, const Action &action, Detection::Callback cb) {
     DetectionAction detectionAction(name, joints, action);
-    detectionAction.signal().connect(cb);
+    detectionAction.connect(cb);
 
     _actions.push_back(detectionAction);
 }
 
-void MovementRecognition::addAction(const char *name, const std::vector<const char*> &joints, const Action &action, MovementRecognition::DetectionCallback cb) {
+void MovementRecognition::addAction(const char *name, const std::vector<const char*> &joints, const Action &action, Detection::Callback cb) {
     std::vector<std::string> jts(joints.size());
     for (size_t i(0); i < joints.size(); ++i)
         jts[i] = std::string(joints[i]);
 
     DetectionAction detectionAction(name, jts, action);
-    detectionAction.signal().connect(cb);
+    detectionAction.connect(cb);
 
     _actions.push_back(detectionAction);
 }

@@ -10,6 +10,10 @@ inline Detection::~Detection() {
     _sig.disconnect_all_slots();
 }
 
+inline void Detection::connect(Detection::Callback cb) {
+    _sig.connect(cb);
+}
+
 inline const boost::signals2::signal<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> &Detection::signal() const {
     return _sig;
 }
