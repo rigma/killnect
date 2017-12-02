@@ -36,7 +36,7 @@ void MovementRecognition::launchRecognition(bool refreshSkeleton) {
             joints.push_back((*_skeleton)(joint));
 
         if (pair.second.action.performed(joints))
-            pair.second.sig(pair.first, pair.second.joints, nullptr);
+            pair.second.sig(pair.first, pair.second.joints, _skeleton);
     }
 }
 
