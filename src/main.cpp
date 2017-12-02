@@ -6,16 +6,35 @@
 #include <string>
 #include <vector>
 
+static STARTUPINFO infos;
+static PROCESS_INFORMATION process;
+static bool paintLaunched(false);
 static bool click(false);
+
+static bool launchPaint() {
+    ZeroMemory(&infos, sizeof(infos));
+    ZeroMemory(&process, sizeof(process));
+    infos.cb = sizeof(infos);
+
+    if (!CreateProcessA(nullptr, "c:\\windows\\system32\\mspaint.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &infos, &process))
+        return false;
+
+    return true;
+}
+
+static void killPaint() {
+    TerminateProcess(process.hProcess, 0);
+    CloseHandle(process.hProcess);
+    CloseHandle(process.hThread);
+}
 
 static void mouseClickDown(const std::string &name, const std::vector<std::string> &joints, const Skeleton *skeleton) {
     if ((*skeleton)(joints[0]).velocity() > 2. && !click) {
         INPUT input[1];
 
         input[0].type = INPUT_MOUSE;
-        input[0].mi.dx = skeleton->handRight().pos[0] * GetSystemMetrics(SM_CXSCREEN);
-        input[0].mi.dy = -skeleton->handRight().pos[1] * GetSystemMetrics(SM_CYSCREEN);
         input[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+        input[0].mi.time = 0;
 
         SendInput(1, input, sizeof(INPUT));
         click = true;
@@ -26,12 +45,23 @@ static void mouseClickUp(const Skeleton *skeleton) {
     INPUT input[1];
 
     input[0].type = INPUT_MOUSE;
-    input[0].mi.dx = skeleton->handRight().pos[0] * GetSystemMetrics(SM_CXSCREEN);
-    input[0].mi.dy = -skeleton->handRight().pos[1] * GetSystemMetrics(SM_CYSCREEN);
     input[0].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+    input[0].mi.time = 0;
 
     SendInput(1, input, sizeof(INPUT));
     click = false;
+}
+
+static void openPaint(const std::string &name, const std::vector<std::string> &joints, const Skeleton *skeleton) {
+    if (!paintLaunched && skeleton->refreshed())
+        paintLaunched = launchPaint();
+}
+
+static void closePaint(const std::string &name, const std::vector<std::string> &joints, const Skeleton *skeleton) {
+    if (paintLaunched && skeleton->refreshed() && (*skeleton)(joints[0]).velocity() > 5.) {
+        killPaint();
+        paintLaunched = false;
+    }
 }
 
 int main(int argc, char **argv) {
@@ -40,9 +70,18 @@ int main(int argc, char **argv) {
 
     DWORD width(GetSystemMetrics(SM_CXSCREEN));
     DWORD height(GetSystemMetrics(SM_CYSCREEN));
-    Box clickBox(-.5, .5, 0., 1., 1.);
+
+    Box clickBox(-.75, .75, 0., 1., 1.);
+    Box closeBox(0., -1, 0., std::numeric_limits<double>::infinity(), 1.);
+
+    std::vector<const char*> hands(2);
+    hands[0] = "HandLeft";
+    hands[1] = "HandRight";
+    Action clapAction(0.01, 5.);
 
     recognition->addDetectionBox("Click", "HandLeft", clickBox, &mouseClickDown);
+    recognition->addDetectionBox("Close", "HandLeft", closeBox, &closePaint);
+    recognition->addAction("Clap", hands, clapAction, &openPaint);
 
     for (;;) {
         skeleton->refresh();
