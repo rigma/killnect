@@ -148,12 +148,6 @@
     <ClInclude Include="include\Action.inl.hpp" />
     <ClInclude Include="include\Box.hpp" />
     <ClInclude Include="include\Box.inl.hpp" />
-    <ClInclude Include="include\Detection.inl.hpp" />
-    <ClInclude Include="include\Detection.hpp" />
-    <ClInclude Include="include\DetectionAction.hpp" />
-    <ClInclude Include="include\DetectionAction.inl.hpp" />
-    <ClInclude Include="include\DetectionBox.hpp" />
-    <ClInclude Include="include\DetectionBox.inl.hpp" />
     <ClInclude Include="include\MovementRecognition.hpp" />
     <ClInclude Include="include\Skeleton.hpp" />
     <ClInclude Include="include\Skeleton.inl.hpp" />
