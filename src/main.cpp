@@ -28,8 +28,8 @@ static void killPaint() {
     CloseHandle(process.hThread);
 }
 
-static void mouseClickDown(const std::string &name, const std::vector<std::string> &joints, const Skeleton *skeleton) {
-    if ((*skeleton)(joints[0]).velocity() > 2. && !click) {
+static void mouseClickDown(const std::string &name, const std::string &joint, const Skeleton *skeleton) {
+    if ((*skeleton)(joint).velocity() > 2. && !click) {
         INPUT input[1];
 
         input[0].type = INPUT_MOUSE;
@@ -79,7 +79,6 @@ int main(int argc, char **argv) {
     hands[1] = "HandRight";
     Action clapAction(0.01, 5.);
 
-    recognition->addDetectionBox("Click", "HandLeft", clickBox, &mouseClickDown);
     recognition->addDetectionBox("Close", "HandLeft", closeBox, &closePaint);
     recognition->addAction("Clap", hands, clapAction, &openPaint);
 
@@ -91,10 +90,13 @@ int main(int argc, char **argv) {
         if (mouse.velocity() > 2.5)
             SetCursorPos(static_cast<int>(mouse.pos[0] * width), static_cast<int>(-mouse.pos[1] * height));
 
-        recognition->launchRecognition();
-
-        if (!recognition->detectionBox("Click").active && click)
+        // Checking if the mouse is clicked
+        if (skeleton->handLeft().pos[1] >= skeleton->shoulderLeft().pos[1] && !click)
+            mouseClickDown("Click", "HandLeft", skeleton);
+        else if (skeleton->handLeft().pos[1] < skeleton->shoulderLeft().pos[1] && click)
             mouseClickUp(skeleton);
+
+        recognition->launchRecognition();
     }
 
     delete recognition;
