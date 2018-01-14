@@ -127,7 +127,18 @@ public:
     void addDetectionBox(const char *name, const char *joint, const Box &box, DetectionCallback cb);
 
 public:
+    /**
+     * @brief Retrieve the detection box with the specified name
+     * @param name: the name of the detection box
+     * @return A reference to the box with the specified name
+     */
     const DetectionBox &detectionBox(const std::string &name) const;
+
+    /**
+     * @brief Retrieve the detection box with the specified name
+     * @param name: the name of the detection box
+     * @return A reference to the box with the specified name
+     */
     const DetectionBox &detectionBox(const char *name) const;
 
 public:
@@ -156,7 +167,18 @@ public:
     void addAction(const char *name, const std::vector<const char*> &joints, const Action &action, DetectionCallback cb);
 
 public:
+    /**
+     * @brief Retrieve the action with the specified name
+     * @param name: the name of the action
+     * @return A reference to the action with the specified name
+     */
     const DetectionAction &action(const std::string &name) const;
+
+    /**
+     * @brief Retrieve the action with the specified name
+     * @param name: the name of the action
+     * @return A reference to the action with the specified name
+     */
     const DetectionAction &action(const char *name) const;
 
 private:
