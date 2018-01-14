@@ -10,12 +10,12 @@ Killnect is mostly a library to manage a Kinect skeleton served by a [FAAST](htt
 
 On this Git project, you can found two samples of use of this academic project:
 
-- [Paint](/rigma/killnect/tree/paint), an example of interaction with another application installed on a computer
-- [SFML](/rigma/killnect/tree/sfml), an example of how Killnect can be used with other libraries
+- [Paint](https://github.com/rigma/killnect/tree/paint), an example of interaction with another application installed on a computer
+- [SFML](https://github.com/rigma/killnect/tree/sfml), an example of how Killnect can be used with other libraries
 
 ## Paint (aka Pain)
 
-This example of application is accessible [here](/rigma/killnect/tree/paint). Or by typing `git checkout paint` in your git terminal.
+This example of application is accessible [here](https://github.com/rigma/killnect/tree/paint). Or by typing `git checkout paint` in your git terminal.
 
 To use it, just launch your FAAST server and connect it with your Kinect. Then, start the application using the [Visual Studio](http://www.visualstudio.com/vs) Project.
 
@@ -29,7 +29,7 @@ The interactions will be the following ones:
 
 ## SFML (aka Is your arm up?)
 
-This example of application is accessible [here](/rigma/killnect/tree/sfml). Or by typing `git checkout sfml` in your git terminal.
+This example of application is accessible [here](https://github.com/rigma/killnect/tree/sfml). Or by typing `git checkout sfml` in your git terminal.
 
 To use it, just launch your FAAST server and connect it with your Kinect. Then, start the application using the [Visual Studio](http://www.visualstudio.com/vs) Project.
 
