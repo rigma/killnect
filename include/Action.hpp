@@ -49,11 +49,34 @@ public:
     const double &acceleration() const;
 
 public:
+    /**
+     * @brief Set the minimal distance when the action is performed
+     * @return The instance modified
+     */
     Action *distance(const double &value);
+
+    /**
+     * @brief Set the minimal velocity when the action is performed
+     * @return The instance modified
+     */
     Action *velocity(const double &speed);
+
+    /**
+    * @brief Set the minimal acceleration when the action is performed
+    * @return The instance modified
+    */
     Action *acceleration(const double &acceleration);
 
 public:
+    /**
+     * @brief Tells if the action has been performed by the skeleton
+     *
+     * Checks if the joints of the provided list have the minimal distance, the minimal velocity and the minimal acceleration
+     * to says that the action is performed.
+     *
+     * @param joints: the list of the joints which are supposed to perform the action. Must be of two elements
+     * @return true if the action is performed, false otherwise
+     */
     bool performed(const std::vector<Skeleton::Joint> &joints) const;
 
 private:
