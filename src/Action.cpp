@@ -10,10 +10,10 @@ bool Action::performed(const std::vector<Skeleton::Joint> &joints) const {
     if (distance > _distance)
         return false;
 
-    if ((*joints.begin()).speed < _speed && (*joints.end()).speed < _speed)
+    if ((*joints.begin()).velocity() < _velocity && (*joints.end()).velocity() < _velocity)
         return false;
 
-    if ((*joints.begin()).acceleration < _acceleration && (*joints.end()).acceleration < _acceleration)
+    if ((*joints.begin()).acceleration() < _acceleration && (*joints.end()).acceleration() < _acceleration)
         return false;
 
     return true;

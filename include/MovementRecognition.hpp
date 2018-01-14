@@ -2,12 +2,13 @@
  * @file MovementRecognition.hpp
  * @brief Movement recognition manager
  * @author Romain Failla
- * @version 1.1
+ * @version 1.2
  */
 
 #ifndef MOVEMENT_RECOGNITION_HPP
 #define MOVEMENT_RECOGNITION_HPP
 
+#include <boost/signals2/signal.hpp>
 #include <map>
 #include <vector>
 
@@ -24,14 +25,30 @@
 class MovementRecognition {
 public:
     /**
-     * @brief Definition of the detection box callback
-     */
-    typedef void(*DetectionBoxCallback)(const std::string&, const std::vector<std::string>&);
-    
+    * @brief Definition of the detection box callback
+    */
+    typedef boost::function<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> DetectionCallback;
+
     /**
-     * @brief Definition of the action's detection callback
-     */
-    typedef void(*ActionCallback)(const std::string&);
+    * @struct DetectionBox
+    * @brief Represents the configuration of a detection box
+    */
+    struct DetectionBox {
+        boost::signals2::signal<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> sig;
+        std::vector<std::string> joints;
+        Box box;
+        bool active;
+    };
+
+    /**
+    * @class DetectionAction
+    * @brief Represents the configuration of a recognizable action
+    */
+    struct DetectionAction {
+        boost::signals2::signal<void(const std::string&, const std::vector<std::string>&, const Skeleton*)> sig;
+        std::vector<std::string> joints;
+        Action action;
+    };
 
 public:
     /**
@@ -58,7 +75,7 @@ public:
      *
      * @param refreshSkeleton if true, the working skeleton is refreshed by the manager
      */
-    void launchRecognition(bool refreshSkeleton = false) const;
+    void launchRecognition(bool refreshSkeleton = false);
 
 public:
     /**
@@ -71,7 +88,7 @@ public:
      * @param box: the configuration of the box in space
      * @param cb: the callback called when the joints will be in the box
      */
-    void addDetectionBox(const std::string &name, const std::vector<std::string> &joints, const Box &box, DetectionBoxCallback cb);
+    void addDetectionBox(const std::string &name, const std::vector<std::string> &joints, const Box &box, DetectionCallback cb);
     
     /**
     * @brief Add a detection box to the manager
@@ -83,7 +100,7 @@ public:
     * @param box: the configuration of the box in space
     * @param cb: the callback called when the joints will be in the box
     */
-    void addDetectionBox(const std::string &name, const std::string &joint, const Box &box, DetectionBoxCallback cb);
+    void addDetectionBox(const std::string &name, const std::string &joint, const Box &box, DetectionCallback cb);
     
     /**
     * @brief Add a detection box to the manager
@@ -95,7 +112,7 @@ public:
     * @param box: the configuration of the box in space
     * @param cb: the callback called when the joints will be in the box
     */
-    void addDetectionBox(const char *name, const std::vector<const char*> &joints, const Box &box, DetectionBoxCallback cb);
+    void addDetectionBox(const char *name, const std::vector<const char*> &joints, const Box &box, DetectionCallback cb);
     
     /**
     * @brief Add a detection box to the manager
@@ -107,7 +124,22 @@ public:
     * @param box: the configuration of the box in space
     * @param cb: the callback called when the joints will be in the box
     */
-    void addDetectionBox(const char *name, const char *joint, const Box &box, DetectionBoxCallback cb);
+    void addDetectionBox(const char *name, const char *joint, const Box &box, DetectionCallback cb);
+
+public:
+    /**
+     * @brief Retrieve the detection box with the specified name
+     * @param name: the name of the detection box
+     * @return A reference to the box with the specified name
+     */
+    const DetectionBox &detectionBox(const std::string &name) const;
+
+    /**
+     * @brief Retrieve the detection box with the specified name
+     * @param name: the name of the detection box
+     * @return A reference to the box with the specified name
+     */
+    const DetectionBox &detectionBox(const char *name) const;
 
 public:
     /**
@@ -120,7 +152,7 @@ public:
      * @param action: the configuration of the action
      * @param cb: the cllback callled when the action is recognized
      */
-    void addAction(const std::string &name, const std::vector<std::string> &joints, const Action &action, ActionCallback cb);
+    void addAction(const std::string &name, const std::vector<std::string> &joints, const Action &action, DetectionCallback cb);
     
     /**
     * @brief Add an action to the dictionnary to recognize
@@ -132,28 +164,22 @@ public:
     * @param action: the configuration of the action
     * @param cb: the cllback callled when the action is recognized
     */
-    void addAction(const char *name, const std::vector<const char*> &joints, const Action &action, ActionCallback cb);
+    void addAction(const char *name, const std::vector<const char*> &joints, const Action &action, DetectionCallback cb);
 
-private:
+public:
     /**
-     * @struct DetectionBox
-     * @brief Represents the configuration of a detection box
+     * @brief Retrieve the action with the specified name
+     * @param name: the name of the action
+     * @return A reference to the action with the specified name
      */
-    struct DetectionBox {
-        std::vector<std::string> joints;
-        Box box;
-        DetectionBoxCallback cb;
-    };
+    const DetectionAction &action(const std::string &name) const;
 
     /**
-     * @struct DetectionAction
-     * @brief Represents the configuration of a recognizable action
+     * @brief Retrieve the action with the specified name
+     * @param name: the name of the action
+     * @return A reference to the action with the specified name
      */
-    struct DetectionAction {
-        std::vector<std::string> joints;
-        Action action;
-        ActionCallback cb;
-    };
+    const DetectionAction &action(const char *name) const;
 
 private:
     std::map<std::string, DetectionBox> _detectionBoxes;

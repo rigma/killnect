@@ -1,3 +1,10 @@
+/**
+ * @file Skeleton.hpp
+ * @brief Kinect skeleton management
+ * @author Romain Failla
+ * @version 1.2
+ */
+
 #ifndef SKELETON_HPP
 #define SKELETON_HPP
 
@@ -5,169 +12,260 @@
 #include <string>
 #include <vector>
 
+/**
+ * @class Skeleton
+ * @brief User skeleton
+ * 
+ * Representation of the Player skeleton of a Kinect user provided by Faast
+ */
 class Skeleton {
 public:
+    /**
+     * @struct Skeleton::Joint
+     * @brief Representation of a skeleton joint
+     */
     struct Joint {
+    public:
+        const vrpn_float64 velocity(bool squared = true) const;
+        const vrpn_float64 acceleration(bool squared = true) const;
+
+    public:
         vrpn_float64 pos[3];
+        vrpn_float64 vel[3];
+        vrpn_float64 acc[3];
         vrpn_float64 distance;
-        vrpn_float64 speed;
-        vrpn_float64 acceleration;
         timeval timestamp;
     };
 
 public:
+    /**
+     * @brief Constructor
+     *
+     * @param name: the name of the player to retrieve
+     * @param address: the address of the FAAST server
+     * @param port: the emitting port of the FAAST server
+     * @param shutup: if true, then no error messages will be displayed
+     */
     Skeleton(const std::string &name, const std::string &address, int port = 3883, bool shutup = false);
+    
+    /**
+     * @brief Constructor
+     *
+     * @param name: the name of the player to retrieve
+     * @param address: the address of the FAAST server
+     * @param port: the emitting port of the FAAST server
+     * @param shutup: if true, then no error messages will be displayed
+     */
     Skeleton(const char *name, const char *address, int port = 3883, bool shutup = false);
+
+    /**
+     * @brief Destructor
+     */
     ~Skeleton();
 
 public:
+    /**
+     * @brief Retrieve a skeleton joint with its name
+     * @param jointName: the name of the joint to retrieve
+     * @return A reference to the selected joint
+     */
     const Joint &operator()(const char *jointName) const;
+    
+    /**
+     * @brief Retrieve a skeleton joint with its name
+     * @param jointName: the name of the joint to retrieve
+     * @return A reference to the selected joint
+     */
     const Joint &operator()(const std::string &jointName) const;
 
 public:
+    /**
+     * @brief Retrieve all the joints of the skeleton
+     * @return A vector of all skeleton joints
+     */
     const std::vector<Joint> &joints() const;
+
+    /**
+     * @brief Return the Ankle Left joint
+     * @return A reference to the joint
+     */
     const Joint &ankleLeft() const;
+    
+    /**
+     * @brief Return the Ankle Right joint
+     * @return A reference to the joint
+     */
     const Joint &ankleRight() const;
+
+    /**
+     * @brief Return the Elbow Left joint
+     * @return A reference to the joint
+     */
     const Joint &elbowLeft() const;
+
+    /**
+     * @brief Return the Elbow Right joint
+     * @return A reference to the joint
+     */
     const Joint &elbowRight() const;
+
+    /**
+     * @brief Return the Foot Left joint
+     * @return A reference to the joint
+     */
     const Joint &footLeft() const;
+
+    /**
+     * @brief Return the Foot Right joint
+     * @return A reference to the joint
+     */
     const Joint &footRight() const;
+
+    /**
+     * @brief Return the Hand Left joint
+     * @return A reference to the joint
+     */
     const Joint &handLeft() const;
+
+    /**
+     * @brief Return the Hand Right joint
+     * @return A reference to the joint
+     */
     const Joint &handRight() const;
+
+    /**
+     * @brief Return the Hand Tip Left joint
+     * @return A reference to the joint
+     */
     const Joint &handTipLeft() const;
+
+    /**
+     * @brief Return the Hand Tip Right joint
+     * @return A reference to the joint
+     */
     const Joint &handTipRight() const;
+
+    /**
+     * @brief Return the Head joint
+     * @return A reference to the joint
+     */
     const Joint &head() const;
+
+    /**
+     * @brief Return the Hip Left joint
+     * @return A reference to the joint
+     */
     const Joint &hipLeft() const;
+
+    /**
+     * @brief Return the Hip Right joint
+     * @return A reference to the joint
+     */
     const Joint &hipRight() const;
+
+    /**
+     * @brief Return the Knee Left joint
+     * @return A reference to the joint
+     */
     const Joint &kneeLeft() const;
+
+    /**
+     * @brief Return the Knee Right joint
+     * @return A reference to the joint
+     */
     const Joint &kneeRight() const;
+
+    /**
+     * @brief Return the Neck joint
+     * @return A reference to the joint
+     */
     const Joint &neck() const;
+
+    /**
+     * @brief Return the Shoulder Left joint
+     * @return A reference to the joint
+     */
     const Joint &shoulderLeft() const;
+
+    /**
+     * @brief Return the Shoulder Right joint
+     * @return A reference to the joint
+     */
     const Joint &shoulderRight() const;
+
+    /**
+     * @brief Return the Spine Base joint
+     * @return A reference to the joint
+     */
     const Joint &spineBase() const;
+
+    /**
+     * @brief Return the Spine Middle joint
+     * @return A reference to the joint
+     */
     const Joint &spineMiddle() const;
+
+    /**
+     * @brief Return the Spine Shoulder joint
+     * @return A reference to the joint
+     */
     const Joint &spineShoulder() const;
+
+    /**
+     * @brief Return the Thumb Left joint
+     * @return A reference to the joint
+     */
     const Joint &thumbLeft() const;
+
+    /**
+     * @brief Return the Thumb Right joint
+     * @return A reference to the joint
+     */
     const Joint &thumbRight() const;
+
+    /**
+     * @brief Return the Wrist Left joint
+     * @return A reference to the joint
+     */
     const Joint &wristLeft() const;
+
+    /**
+     * @brief Return the Wrist Right joint
+     * @return A reference to the joint
+     */
     const Joint &wristRight() const;
 
+    /**
+     * @brief Tell if the skeleton was refreshed
+     * @return true if the skeleton were refreshed, false otherwise
+     */
+    const bool refreshed() const;
+
 public:
-    void refresh() const;
+    /**
+     * @brief Refresh the skeleton
+     *
+     * Retrieve the last known informations of the skeleton tracked from the FAAST server
+     */
+    void refresh();
 
 private:
+    /**
+     * @brief Initialize all the joints of the tracked skeleton
+     */
     void initSkeleton();
 
 private:
     std::vector<Joint> _currentJoints;
     std::vector<Joint> _previousJoints;
     vrpn_Tracker_Remote *_remote;
+    bool _refreshed;
 
-    friend void VRPN_CALLBACK handleTrackerInput(void*, const vrpn_TRACKERCB);
+    friend void VRPN_CALLBACK handleTrackerPositionInput(void*, const vrpn_TRACKERCB);
+    friend void VRPN_CALLBACK handleTrackerVelocityInput(void*, const vrpn_TRACKERVELCB);
+    friend void VRPN_CALLBACK handleTrackerAccelerationInput(void*, const vrpn_TRACKERACCCB);
 };
 
-inline const std::vector<Skeleton::Joint> &Skeleton::joints() const {
-    return _currentJoints;
-}
-
-inline const Skeleton::Joint &Skeleton::ankleLeft() const {
-    return _currentJoints[14];
-}
-
-inline const Skeleton::Joint &Skeleton::ankleRight() const {
-    return _currentJoints[18];
-}
-
-inline const Skeleton::Joint &Skeleton::elbowLeft() const {
-    return _currentJoints[5];
-}
-
-inline const Skeleton::Joint &Skeleton::elbowRight() const {
-    return _currentJoints[9];
-}
-
-inline const Skeleton::Joint &Skeleton::footLeft() const {
-    return _currentJoints[15];
-}
-
-inline const Skeleton::Joint &Skeleton::footRight() const {
-    return _currentJoints[19];
-}
-
-inline const Skeleton::Joint &Skeleton::handLeft() const {
-    return _currentJoints[7];
-}
-
-inline const Skeleton::Joint &Skeleton::handRight() const {
-    return _currentJoints[11];
-}
-
-inline const Skeleton::Joint &Skeleton::handTipLeft() const {
-    return _currentJoints[21];
-}
-
-inline const Skeleton::Joint &Skeleton::handTipRight() const {
-    return _currentJoints[23];
-}
-
-inline const Skeleton::Joint &Skeleton::head() const {
-    return _currentJoints[3];
-}
-
-inline const Skeleton::Joint &Skeleton::hipLeft() const {
-    return _currentJoints[12];
-}
-
-inline const Skeleton::Joint &Skeleton::hipRight() const {
-    return _currentJoints[16];
-}
-
-inline const Skeleton::Joint &Skeleton::kneeLeft() const {
-    return _currentJoints[13];
-}
-
-inline const Skeleton::Joint &Skeleton::kneeRight() const {
-    return _currentJoints[17];
-}
-
-inline const Skeleton::Joint &Skeleton::neck() const {
-    return _currentJoints[2];
-}
-
-inline const Skeleton::Joint &Skeleton::shoulderLeft() const {
-    return _currentJoints[4];
-}
-
-inline const Skeleton::Joint &Skeleton::shoulderRight() const {
-    return _currentJoints[8];
-}
-
-inline const Skeleton::Joint &Skeleton::spineBase() const {
-    return _currentJoints[0];
-}
-
-inline const Skeleton::Joint &Skeleton::spineMiddle() const {
-    return _currentJoints[1];
-}
-
-inline const Skeleton::Joint &Skeleton::spineShoulder() const {
-    return _currentJoints[20];
-}
-
-inline const Skeleton::Joint &Skeleton::thumbLeft() const {
-    return _currentJoints[22];
-}
-
-inline const Skeleton::Joint &Skeleton::thumbRight() const {
-    return _currentJoints[24];
-}
-
-inline const Skeleton::Joint &Skeleton::wristLeft() const {
-    return _currentJoints[6];
-}
-
-inline const Skeleton::Joint &Skeleton::wristRight() const {
-    return _currentJoints[10];
-}
+#include "Skeleton.inl.hpp"
 
 #endif

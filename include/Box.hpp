@@ -23,8 +23,22 @@ public:
      * @brief Constructor
      *
      * Default constructor of the class
+     *
+     * @param x: the abscissa of the center
+     * @param y: the ordinate of the center
+     * @param z: the depth of the center
+     * @param width: the width of the box
+     * @param height: the height of the box
+     * @param depth: the depth of the box
      */
-    Box();
+    Box(
+        const double &x = 0.,
+        const double &y = 0.,
+        const double &z = 0.,
+        const double &width = std::numeric_limits<double>::infinity(),
+        const double &height = std::numeric_limits<double>::infinity(),
+        const double &depth = std::numeric_limits<double>::infinity()
+    );
 
     /**
      * @brief Constructor
@@ -147,55 +161,6 @@ private:
     double _depth;
 };
 
-inline Box::~Box() {}
-
-inline void Box::operator=(const Box &parent) {
-    _center = parent._center;
-    _width = parent._width;
-    _height = parent._height;
-    _depth = parent._depth;
-}
-
-inline const double &Box::width() const {
-    return _width;
-}
-
-inline const double &Box::height() const {
-    return _height;
-}
-
-inline const double &Box::depth() const {
-    return _depth;
-}
-
-inline Box *Box::width(const double &value) {
-    if (value >= 0.) {
-        _width = value;
-
-        return this;
-    }
-
-    return nullptr;
-}
-
-inline Box *Box::height(const double &value) {
-    if (value >= 0.) {
-        _height = value;
-
-        return this;
-    }
-
-    return nullptr;
-}
-
-inline Box *Box::depth(const double &value) {
-    if (value >= 0.) {
-        _depth = value;
-
-        return this;
-    }
-
-    return nullptr;
-}
+#include "Box.inl.hpp"
 
 #endif
